@@ -1,0 +1,140 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V2",
+    "version": "v2"
+  },
+  "paths": {
+    "/v2/authn/activate": {
+      "post": {
+        "summary": "Activates an authenticator",
+        "tags": [
+          "Authn"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "description": "Key that identifies the account",
+            "name": "bcaccesskey",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "name": "authenticator",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "activation_key": {
+                  "type": "string"
+                },
+                "secret_token": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "activation_key",
+                "secret_token"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "activated the authenticator"
+          },
+          "404": {
+            "description": "fails to activate authenticator given invalid accesskey"
+          }
+        }
+      }
+    },
+    "/v2/clientz/verify": {
+      "post": {
+        "summary": "Selective Modality Verification",
+        "tags": [
+          "Verify"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "description": "Key that identifies the account",
+            "name": "bcaccesskey",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "header",
+            "description": "Key that identifies the client",
+            "name": "bcentitykey",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "header",
+            "description": "Client secret token",
+            "name": "bcsecrettoken",
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "name": "verification",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "transaction_id": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "user_uuid": {
+                  "type": "integer"
+                },
+                "modality_subset": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "modality_factors": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "transaction_id",
+                "message",
+                "user_uuid"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create a normal verification"
+          }
+        }
+      }
+    }
+  }
+}
